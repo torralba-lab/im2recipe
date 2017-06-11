@@ -1,0 +1,6 @@
+[submodule "th_skip"]
+	path = th_skip
+	url = https://github.com/nhynes/th-skip.git
+[submodule "th-skip"]
+	path = th-skip
+	url = https://github.com/nhynes/th-skip.git

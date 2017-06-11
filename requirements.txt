@@ -1,0 +1,10 @@
+numpy
+scipy
+pillow
+matplotlib
+h5py
+torchfile
+scikit-learn
+tqdm
+word2vec
+nltk
