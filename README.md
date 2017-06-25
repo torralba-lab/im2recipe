@@ -74,7 +74,7 @@ We use Python2.7 for data processing, with the following packages:
 
 ## Recipe1M Dataset
 
-Our Recipe1M dataset is available for [download](https://im2recipe.csail.mit.edu/ds_form.html).
+Our Recipe1M dataset is available for [download](https://im2recipe.csail.mit.edu/dataset/download).
 
 ## Vision models
 
@@ -87,12 +87,8 @@ when training, point arguments ```-proto``` and ```-caffemodel``` to the files y
 - ResNet-50 ([torchfile](https://d2j0dndfm35trm.cloudfront.net/resnet-50.t7)).
 
 when training, point the argument ```-resnet_model``` to this file.
-  
-*Note: These files are already downloaded and stored under ```./data/vision/```.*
 
 ## Out-of-the-box training
-
-*TODO: Maybe make these files available for download:*
 
 ```
 ./data/data.h5 (140GB)
@@ -100,8 +96,8 @@ when training, point the argument ```-resnet_model``` to this file.
 ```
 
 You can download these two files to start training the model right away:
-- [HDF5](insert_link_here) file containing skip-instructions vectors, ingredient ids, categories and preprocessed images.
-- Ingredient Word2Vec [vocabulary](insert_link_here). Used during training to select word2vec vectors given ingredient ids.
+- [HDF5](http://im2recipe.csail.mit.edu/pretrained/data.h5.gz) file containing skip-instructions vectors, ingredient ids, categories and preprocessed images.
+- Ingredient Word2Vec [vocabulary](http://im2recipe.csail.mit.edu/pretrained/vocab.bin.gz). Used during training to select word2vec vectors given ingredient ids.
 
 
 ## Prepare training data
@@ -113,7 +109,7 @@ We provide the steps to format and prepare Recipe1M data for training the trijoi
 We provide the script we used to extract semantic categories from bigrams in recipe titles:
 
 - Run ```python bigrams --crtbgrs```. This will save to disk all bigrams in the corpus of all recipe titles in the training set, sorted by frequency.
-- Running the same script with ```--nocrtbgrs``` will create class labels from those bigrams adding food101 categories. 
+- Running the same script with ```--nocrtbgrs``` will create class labels from those bigrams adding food101 categories.
 
 These steps will create a file called ```classes1M.pkl``` in ```./data/``` that will be used later to create the HDF5 file including categories.
 
@@ -134,11 +130,6 @@ Training word2vec with recipe data:
 - Move ```vocab.bin``` and ```vocab.txt``` to ```./data/text/```.
 
 ### Skip-instructions
-
-Code can be found at:
-``` ./th-skip/ ```
-
-*Note: This code was cloned from [https://github.com/nhynes/th-skip](https://github.com/nhynes/th-skip) and* **slightly** *modified. Hopefully the changes I made can be added to Nick's repo and we can point to it directly. Alternatively we can just release it as a part of this repo as a fork of his.*
 
 - Navigate to ```th-skip```
 - Create directories where data will be stored:
@@ -207,34 +198,12 @@ python mk_dataset.py
 -stvecs /path/to/skip-instr_files/
 ```
 
-*Note: If you moved all the intermediate generated files (i.e. word2vec vocabulary and skip-thoughts vectors), you can just run ```python mk_dataset.py``` and it should work OK.*
-
-*Note2: If we provide everything in ```./data``` (excluding .h5 files and vision models) available for download, one can skip all the steps above and simply run ```mk_dataset.py```.*
-
-*Note3: Current version of the dataset still contains duplicates, so I use the file in ```./data/remove1M.txt``` to ignore duplicate entries. Once these are removed from the dataset (i.e from ```layerX.json``` files), the parts of the code that load and use the entries in ```remove1M.txt``` can be removed.*
-
-## Training
-
-- Train the model with: 
-```
-th main.lua 
--dataset /path/to/h5/file/data.h5 
--ingrW2V /path/to/w2v/vocab.bin
--net resnet 
--resnet_model /path/to/resnet/model/resnet-50.t7
--snapfile snaps/snap
--dispfreq 1000
--valfreq 10000
-```
-
-*Note: Again, this can be run without arguments with default parameters if files are in the default location.*
-
 - You can use multiple GPUs to train the model with the ```-ngpus``` flag. With 4 GTX Titan X you can set ```-batchSize``` to ~150. This is the default config, which will make the model converge in about 3 days.
 - Plot loss curves anytime with ```python plotcurve.py -logfile /path/to/logfile.txt```. If ```dispfreq``` and ```valfreq``` are different than default, they need to be passed as arguments to this script for the curves to be correctly displayed. Running this script will also give you the elapsed training time.
 
 ## Testing
 
-- Extract features from test set ```th main.lua -test 1 -loadsnap snaps/snap_xx.dat```. They will be saved in ```results```. 
+- Extract features from test set ```th main.lua -test 1 -loadsnap snaps/snap_xx.dat```. They will be saved in ```results```.
 - After feature extraction, compute MedR and recall scores with ```python rank.py```.
 - Extracting embeddings for any dataset partition is possible with the ```extract``` flag, which can be either ```train```, ```val``` or ```test``` (default).
 
@@ -248,7 +217,7 @@ Here I just give additional indications about the training procedure and data pr
 
 ### Training procedure
 
-- The model is now trained end-to-end and freezes different parts of the network as training progresses (it can be either the vision ConvNet or the rest of the model). 
+- The model is now trained end-to-end and freezes different parts of the network as training progresses (it can be either the vision ConvNet or the rest of the model).
 - It starts freezing the vision side, until validation flattens or starts increasing.
 - If validation loss does not decrease for N validations (N is specified with the ```patience``` argument), we freeze the other module of the network and continue training.
 - There is also a parameter ```iter_swap``` to switch freezing after a fixed number of iterations instead of based on val loss (to use as an alternative to ```patience``` argument).
@@ -285,7 +254,7 @@ Different architectures:
 
 ### Current model and performance
 
-The [best model](http://data.csail.mit.edu/im2recipe/model_resnet.zip) achieves the following performance on the test set:
+The [best model](http://im2recipe.csail.mit.edu/pretrained/im2recipe_model.t7.gz) achieves the following performance on the test set:
 
 | MedR1k        | Recall@1           | Recall@5  | Recall@10 |
 |:-------------:|:------------------:|:---------:|:---------:|
@@ -307,4 +276,4 @@ The hyperparameters with which this model was trained are set as the default one
 
 ## Contact
 
-These instructions were written by Amaia Salvador in December 2016. For any questions you can reach her at amaia.salvador@upc.edu. For questions about skip-thoughts torch implementation please reach Nick Hynes at nhynes@mit.edu.
+These instructions were written by Amaia Salvador in December 2016. For any questions you can reach her at amaia.salvador@upc.edu. For questions about the dataset or skip-thoughts torch implementation please reach Nick Hynes at nhynes@mit.edu.
