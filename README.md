@@ -8,6 +8,17 @@ Clone it using
 git clone --recursive https://github.com/torralba-lab/im2recipe.git
 ```
 
+If you find this useful, consider citing:
+
+```
+@inproceedings{salvador2017learning,
+  title={Learning Cross-modal Embeddings for Cooking Recipes and Food Images},
+  author={Salvador, Amaia and Hynes, Nicholas and Aytar, Yusuf and Marin, Javier and 
+          Ofli, Ferda and Weber, Ingmar and Torralba, Antonio},
+  booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  year={2017}
+}
+```
 
 ## Contents
 1. [Installation](#installation)
@@ -22,11 +33,7 @@ git clone --recursive https://github.com/torralba-lab/im2recipe.git
 6. [Training](#training)
 7. [Testing](#testing)
 8. [Visualization](#visualization)
-9. [More notes](#more-notes)
-  1. [Training procedure](#training-procedure)
-  2. [Training data](#training-data)
-  3. [Image preprocessing](#image-preprocessing)
-  4. [Current model and performance](#current-model-and-performance)
+9. [Pretrained model](#pretrained-model)
 10. [Contact](#contact)
 
 ## Installation
@@ -74,7 +81,7 @@ We use Python2.7 for data processing, with the following packages:
 
 ## Recipe1M Dataset
 
-Our Recipe1M dataset is available for [download](https://im2recipe.csail.mit.edu/dataset/download).
+Our Recipe1M dataset is available for download [here](https://im2recipe.csail.mit.edu/dataset/download).
 
 ## Vision models
 
@@ -201,6 +208,25 @@ python mk_dataset.py
 - You can use multiple GPUs to train the model with the ```-ngpus``` flag. With 4 GTX Titan X you can set ```-batchSize``` to ~150. This is the default config, which will make the model converge in about 3 days.
 - Plot loss curves anytime with ```python plotcurve.py -logfile /path/to/logfile.txt```. If ```dispfreq``` and ```valfreq``` are different than default, they need to be passed as arguments to this script for the curves to be correctly displayed. Running this script will also give you the elapsed training time.
 
+## Training
+
+- Train the model with: 
+```
+th main.lua 
+-dataset /path/to/h5/file/data.h5 
+-ingrW2V /path/to/w2v/vocab.bin
+-net resnet 
+-resnet_model /path/to/resnet/model/resnet-50.t7
+-snapfile snaps/snap
+-dispfreq 1000
+-valfreq 10000
+```
+
+*Note: Again, this can be run without arguments with default parameters if files are in the default location.*
+
+- You can use multiple GPUs to train the model with the ```-ngpus``` flag. With 4 GTX Titan X you can set ```-batchSize``` to ~150. This is the default config, which will make the model converge in about 3 days.
+- Plot loss curves anytime with ```python plotcurve.py -logfile /path/to/logfile.txt```. If ```dispfreq``` and ```valfreq``` are different than default, they need to be passed as arguments to this script for the curves to be correctly displayed. Running this script will also give you the elapsed training time.
+
 ## Testing
 
 - Extract features from test set ```th main.lua -test 1 -loadsnap snaps/snap_xx.dat```. They will be saved in ```results```.
@@ -211,69 +237,14 @@ python mk_dataset.py
 
 We provide a script to visualize top-1 im2recipe examples in ```./pyscripts/vis.py ```. It will save figures under ```./data/figs/```.
 
-## More notes
+## Pretrained model
 
-Here I just give additional indications about the training procedure and data processing.
-
-### Training procedure
-
-- The model is now trained end-to-end and freezes different parts of the network as training progresses (it can be either the vision ConvNet or the rest of the model).
-- It starts freezing the vision side, until validation flattens or starts increasing.
-- If validation loss does not decrease for N validations (N is specified with the ```patience``` argument), we freeze the other module of the network and continue training.
-- There is also a parameter ```iter_swap``` to switch freezing after a fixed number of iterations instead of based on val loss (to use as an alternative to ```patience``` argument).
-- If both ```patience=-1``` and ```iter_swap=-1``` the model will be trained all at once (no freezing). This however does not work at all for VGG-16 (tested on 800k dataset - loss fluctuates and does not decrease from 0.18) and gives worse results for ResNet-50 than when alternate freeze/unfreeze scheme is used (more on this in the note below).
-- We train forever unless a maximum number of iterations are given with the ```niters``` argument. However, model snapshots are saved every time the model is validated only if it improves performance on validation. The frequency can be specified with the ```valfreq``` argument.
-
-**Note: What I found after training several models is that cosine loss is not correlated with median rank (both computed on validation set). For instance, it was possible for me to train a model at once (no freezing) with ResNet-50 which achieved a validation loss of 0.091 - this model gave a medR of 6.8 on the validation set. The same model trained with freezing/unfreezing with ```patience=3``` for the same number of iterations & same data reached a loss of 0.103, but gives a median rank of 4.8, which is significantly better than the former.**
-
-*Note2: When using ```patience``` parameter for freezing/unfreezing, in practice the swap only happens once (i.e. validation loss stops decreasing after the second swap, so model snapshots are no longer saved). This means that there is only one iteration: first we train embeddings, LSTMs and classifiers, then we train vision layers. This is the same procedure we described in the paper, only that now it happens automatically instead of manually stopping and finetuning the model.*
-
-### Training data
-
-- 1M dataset
-- Images: up to 5 per recipe. This can be changed with ```maxims``` parameter when running ```./pyscripts/mk_dataset.py```.
-- Instructions: Skip-thoughts (trained with torch implementation by Nick - dimension 1024)
-- Ingredients: word2vec dimension 300
-
-### Image preprocessing
-
-- Scale so that the shortest side is 256
-- Center crop of 256x256
-- The above steps are applied to all images which are then saved in a h5 file. This could also be done during training from JPG files, but it makes training slower.
-
-During training & testing:
-
-- A random image out of the (maximum 5) images from a recipe is selected.
-- Random crop of 224x224 out of 256x256 center crop.
-- Horizontal flipping with 0.5 probability.
-
-Different architectures:
-
-- ResNet50: Input image in range 0-1, normalized with mean and std (following [this](https://github.com/facebook/fb.resnet.torch) repository, from which the ResNet-50 model was taken from).
-- VGG-16: Input image in range 0-255, mean normalized.
-
-### Current model and performance
-
-The [best model](http://im2recipe.csail.mit.edu/pretrained/im2recipe_model.t7.gz) achieves the following performance on the test set:
+Our best model can be downloaded [here](http://im2recipe.csail.mit.edu/pretrained/im2recipe_model.t7.gz), and achieves the following performance on the test set:
 
 | MedR1k        | Recall@1           | Recall@5  | Recall@10 |
 |:-------------:|:------------------:|:---------:|:---------:|
 | 4.8           | 0.2502             | 0.5259    |     0.6472|
 
-The hyperparameters with which this model was trained are set as the default ones in the current version of the code. These are:
-- Learning rate: 0.0001
-- Optimizer: Adam
-- Embedding dimension: 1024
-- Vision Convnet: ResNet-50
-- Loss weights: 0.98 --> cosine similarity, 0.01 --> recipe classification, 0.01 --> image classification
-- Number of semantic categories for regularization: 1048 (1047 + 1 for background)
-- Number of iterations: 230k
-- Final cosine validation loss: 0.103
-- Batch size: 150
-- Training time (4 GTX Titan X GPUs): 3 days
-- Patience: 3
-- Validation frequency: 10k iterations
-
 ## Contact
 
-These instructions were written by Amaia Salvador in December 2016. For any questions you can reach her at amaia.salvador@upc.edu. For questions about the dataset or skip-thoughts torch implementation please reach Nick Hynes at nhynes@mit.edu.
+For any questions or suggestions you can use the issues section or reach us at amaia.salvador@upc.edu or nhynes@mit.edu.
