@@ -231,11 +231,7 @@ We provide a script to visualize top-1 im2recipe examples in ```./pyscripts/vis.
 
 ## Pretrained model
 
-Our best model can be downloaded [here](http://im2recipe.csail.mit.edu/pretrained/im2recipe_model.t7.gz), and achieves the following performance on the test set:
-
-| MedR1k        | Recall@1           | Recall@5  | Recall@10 |
-|:-------------:|:------------------:|:---------:|:---------:|
-| 4.8           | 0.2502             | 0.5259    |     0.6472|
+Our best model can be downloaded [here](http://im2recipe.csail.mit.edu/pretrained/im2recipe_model.t7.gz).
 
 ## Contact
 
