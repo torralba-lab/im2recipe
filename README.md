@@ -3,12 +3,13 @@
 This repository contains the code to train and evaluate models from the paper:  
 _Learning Cross-modal Embeddings for Cooking Recipes and Food Images_
 
-Clone it using
-```
+Clone it using:
+
+```shell
 git clone --recursive https://github.com/torralba-lab/im2recipe.git
 ```
 
-If you find this useful, consider citing:
+If you find this code useful, please consider citing:
 
 ```
 @inproceedings{salvador2017learning,
@@ -26,10 +27,6 @@ If you find this useful, consider citing:
 3. [Vision models](#vision-models)
 4. [Out-of-the-box training](#out-of-the-box-training)
 5. [Prepare training data](#prepare-training-data)
-  1. [Choosing semantic categories](#choosing-semantic-categories)
-  2. [Word2Vec](#word2vec)
-  3. [Skip-instructions](#skip-instructions)
-  4. [Creating HDF5 file](#creating-hdf5-file)
 6. [Training](#training)
 7. [Testing](#testing)
 8. [Visualization](#visualization)
@@ -75,9 +72,7 @@ git checkout chars2
 luarocks build hdf5-0-0.rockspec
 ```
 
-We use Python2.7 for data processing, with the following packages:
-- numpy, scipy, h5py, tqdm, pillow, matplotlib, scikit-learn, word2vec, nltk and torchfile. These can be installed with:
-```pip install -r requirements.txt```
+We use Python2.7 for data processing. Install dependencies with ```pip install -r requirements.txt```
 
 ## Recipe1M Dataset
 
@@ -85,7 +80,7 @@ Our Recipe1M dataset is available for download [here](https://im2recipe.csail.mi
 
 ## Vision models
 
-The code has been tested both with VGG-16 and ResNet-50 vision models. The following files are needed:
+We used the following pretrained vision models:
 
 - VGG-16 ([prototxt](https://gist.githubusercontent.com/ksimonyan/211839e770f7b538e2d8/raw/ded9363bd93ec0c770134f4e387d8aaaaa2407ce/VGG_ILSVRC_16_layers_deploy.prototxt) and [caffemodel](http://www.robots.ox.ac.uk/~vgg/software/very_deep/caffe/VGG_ILSVRC_16_layers.caffemodel)).
 
@@ -109,7 +104,7 @@ You can download these two files to start training the model right away:
 
 ## Prepare training data
 
-We provide the steps to format and prepare Recipe1M data for training the trijoint model. We hope these instructions will allow others to train similar models with other data sources as well.
+We also provide the steps to format and prepare Recipe1M data for training the trijoint model. We hope these instructions will allow others to train similar models with other data sources as well.
 
 ### Choosing semantic categories
 
@@ -204,9 +199,6 @@ python mk_dataset.py
 -h5_data /path/to/h5/outfile/data.h5
 -stvecs /path/to/skip-instr_files/
 ```
-
-- You can use multiple GPUs to train the model with the ```-ngpus``` flag. With 4 GTX Titan X you can set ```-batchSize``` to ~150. This is the default config, which will make the model converge in about 3 days.
-- Plot loss curves anytime with ```python plotcurve.py -logfile /path/to/logfile.txt```. If ```dispfreq``` and ```valfreq``` are different than default, they need to be passed as arguments to this script for the curves to be correctly displayed. Running this script will also give you the elapsed training time.
 
 ## Training
 
