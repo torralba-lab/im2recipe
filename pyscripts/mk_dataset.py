@@ -67,7 +67,7 @@ IMPATH = os.path.join(params.dataset,'images')
 DATASET = params.dataset
 
 # don't use this file once dataset is clean
-with open('../data/remove1M.txt','r') as f:
+with open('./remove1M.txt','r') as f:
     remove_ids = {w.rstrip(): i for i, w in enumerate(f)}
 
 t = time.time()
@@ -171,7 +171,13 @@ for i,entry in tqdm(enumerate(dataset)):
     num_ims[partition].append(min(params.maxims,len(imgs)))
     impos_list = []
     for imid in range(min(params.maxims,len(imgs))):
-        imname = os.path.join(IMPATH,entry['images'][imid]['id'])
+        
+        image_id = entry['images'][imid]['id']
+        # images were arranged in a four-level hierarchy corresponding to the
+        # first four digits of the image id. For example: `val/e/f/3/d/ef3dc0de11.jpg`
+        imname = os.path.join(IMPATH,partition,image_id[0],image_id[1],
+                                               image_id[2],image_id[3],
+                                               image_id)
         image_names[partition].append(imname)
         img,fail = process_image(imname,imsize)
         img = center_crop(imsize,img)
