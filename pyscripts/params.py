@@ -18,7 +18,7 @@ def get_parser():
     parser.add_argument('-test_feats',  dest='test_feats',      default = '../results/')
 
     # new dataset 1M
-    parser.add_argument('-f101_cats',   dest='f101_cats',       default = '../data/food101_classes_renamed.txt')
+    parser.add_argument('-f101_cats',   dest='f101_cats',       default = './food101_classes_renamed.txt')
     parser.add_argument('-vocab',       dest='vocab',           default = '../data/text/vocab.txt')
     parser.add_argument('-stvecs',      dest='stvecs',          default = '../data/text/')
     parser.add_argument('-dataset',     dest='dataset',         default = '../data/recipe1M/')
