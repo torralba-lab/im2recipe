@@ -1,4 +1,4 @@
-# Im2recipe
+# im2recipe: Learning Cross-modal Embeddings for Cooking Recipes and Food Images
 
 This repository contains the code to train and evaluate models from the paper:  
 _Learning Cross-modal Embeddings for Cooking Recipes and Food Images_
@@ -217,7 +217,7 @@ th main.lua
 *Note: Again, this can be run without arguments with default parameters if files are in the default location.*
 
 - You can use multiple GPUs to train the model with the ```-ngpus``` flag. With 4 GTX Titan X you can set ```-batchSize``` to ~150. This is the default config, which will make the model converge in about 3 days.
-- Plot loss curves anytime with ```python plotcurve.py -logfile /path/to/logfile.txt```. If ```dispfreq``` and ```valfreq``` are different than default, they need to be passed as arguments to this script for the curves to be correctly displayed. Running this script will also give you the elapsed training time.
+- Plot loss curves anytime with ```python plotcurve.py -logfile /path/to/logfile.txt```. If ```dispfreq``` and ```valfreq``` are different than default, they need to be passed as arguments to this script for the curves to be correctly displayed. Running this script will also give you the elapsed training time. ```logifle.txt``` should contain the stdout of ```main.lua```. Redirect it with ```th main.lua > /path/to/logfile.txt ```.
 
 ## Testing
 
