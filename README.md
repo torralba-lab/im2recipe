@@ -76,7 +76,7 @@ We use Python2.7 for data processing. Install dependencies with ```pip install -
 
 ## Recipe1M Dataset
 
-Our Recipe1M dataset is available for download [here](https://im2recipe.csail.mit.edu/dataset/download).
+Our Recipe1M dataset is available for download [here](http://im2recipe.csail.mit.edu/dataset/download).
 
 ## Vision models
 
@@ -98,8 +98,8 @@ when training, point the argument ```-resnet_model``` to this file.
 ```
 
 You can download these two files to start training the model right away:
-- [HDF5](http://im2recipe.csail.mit.edu/pretrained/data.h5.gz) file containing skip-instructions vectors, ingredient ids, categories and preprocessed images.
-- Ingredient Word2Vec [vocabulary](http://im2recipe.csail.mit.edu/pretrained/vocab.bin.gz). Used during training to select word2vec vectors given ingredient ids.
+- [HDF5](http://data.csail.mit.edu/im2recipe/pretrained/data.h5.gz) file containing skip-instructions vectors, ingredient ids, categories and preprocessed images.
+- Ingredient Word2Vec [vocabulary](http://data.csail.mit.edu/im2recipe/pretrained/vocab.bin.gz). Used during training to select word2vec vectors given ingredient ids.
 
 
 ## Prepare training data
@@ -231,7 +231,7 @@ We provide a script to visualize top-1 im2recipe examples in ```./pyscripts/vis.
 
 ## Pretrained model
 
-Our best model can be downloaded [here](http://im2recipe.csail.mit.edu/pretrained/im2recipe_model.t7.gz).
+Our best model can be downloaded [here](http://data.csail.mit.edu/im2recipe/pretrained/im2recipe_model.t7.gz).
 
 ## Contact
 
