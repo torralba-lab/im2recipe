@@ -35,6 +35,7 @@ function DataLoader:__init(dataTrain, dataVal, opts)
 end
 
 function DataLoader:makebatch(partition)
+  collectgarbage()
   partData = partition == 'val' and self.dataVal or self.dataTrain
   local seqlen = partData.lengths[torch.multinomial(partData.lenFreqs, 1)[1]]
   local seqlenInds = partData.indsByLen[seqlen]

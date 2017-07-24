@@ -26,7 +26,7 @@ function TestDataLoader:__init(dataTest, opts)
 end
 
 function TestDataLoader:makebatch()
-
+  collectgarbage()
   local partData = self.data
 
   if partData.lenFreqs:sum() == 0 then
