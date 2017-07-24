@@ -30,6 +30,7 @@ function DataLoader:__init(dataTrain, dataVal, opts)
   self.imsize = opts.imsize
   torch.manualSeed(opts.seed)
 
+  self.dsH5 = hdf5.open(self.dataset, 'r')
 
   collectgarbage()
 end
@@ -41,7 +42,7 @@ function DataLoader:makebatch(partition)
   local seqlenInds = partData.indsByLen[seqlen]
   local batchSize = math.min(#seqlenInds, self.batchSize)
 
-  imagefile = hdf5.open(self.dataset, 'r'):read('/ims_'..partData.partition)
+  local imagefile = self.dsH5:read('/ims_'..partData.partition)
   local selIndInds = torch.randperm(#seqlenInds) -- indices of indices in the batch
   local batchIds = torch.CharTensor(batchSize, 11)
   local batchImgs
@@ -112,7 +113,6 @@ function DataLoader:makebatch(partition)
 
     batchIngrs[i] = partData.ingrs[selInd]
   end
-  imagefile:close()
   if self.semantic then
     return {batchImgs, batchInstrs, batchIngrs}, {batchMatches,batchClsImg,batchClsRecipe}, batchIds
   else
@@ -125,4 +125,6 @@ function DataLoader:partitionSize(partition)
   return ds.rlens:size(1)
 end
 
-function DataLoader:terminate() end
+function DataLoader:terminate()
+  self.dsH5:close()
+end
