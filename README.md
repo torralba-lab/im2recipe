@@ -232,6 +232,10 @@ We provide a script to visualize top-1 im2recipe examples in ```./pyscripts/vis.
 ## Pretrained model
 
 Our best model can be downloaded [here](http://data.csail.mit.edu/im2recipe/pretrained/im2recipe_model.t7.gz).
+You can test it with:
+```
+th main.lua -test 1 -loadsnap im2recipe_model.t7
+```
 
 ## Contact
 
