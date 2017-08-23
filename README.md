@@ -97,9 +97,9 @@ when training, point the argument ```-resnet_model``` to this file.
 ./data/text/vocab.bin
 ```
 
-You can download these two files to start training the model right away:
-- [HDF5](http://data.csail.mit.edu/im2recipe/pretrained/data.h5.gz) file containing skip-instructions vectors, ingredient ids, categories and preprocessed images.
-- Ingredient Word2Vec [vocabulary](http://data.csail.mit.edu/im2recipe/pretrained/vocab.bin.gz). Used during training to select word2vec vectors given ingredient ids.
+In order to download these files to start training the model you must first register and agree to the terms of use [here](http://im2recipe.csail.mit.edu/dataset/download):
+- HDF5 file containing skip-instructions vectors, ingredient ids, categories and preprocessed images.
+- Ingredient Word2Vec vocabulary. Used during training to select word2vec vectors given ingredient ids.
 
 
 ## Prepare training data
