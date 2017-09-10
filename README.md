@@ -92,15 +92,11 @@ when training, point the argument ```-resnet_model``` to this file.
 
 ## Out-of-the-box training
 
-```
-./data/data.h5 (140GB)
-./data/text/vocab.bin
-```
+To train the model, you will need the following files:
+* `data/data.h5`: HDF5 file containing skip-instructions vectors, ingredient ids, categories and preprocessed images.
+* `data/text/vocab.bin`: ingredient Word2Vec vocabulary. Used during training to select word2vec vectors given ingredient ids.
 
-In order to download these files to start training the model you must first register and agree to the terms of use [here](http://im2recipe.csail.mit.edu/dataset/download):
-- HDF5 file containing skip-instructions vectors, ingredient ids, categories and preprocessed images.
-- Ingredient Word2Vec vocabulary. Used during training to select word2vec vectors given ingredient ids.
-
+The links to download them are available [here](http://im2recipe.csail.mit.edu/dataset/download).
 
 ## Prepare training data
 
@@ -231,7 +227,7 @@ We provide a script to visualize top-1 im2recipe examples in ```./pyscripts/vis.
 
 ## Pretrained model
 
-Our best model can be downloaded [here](http://data.csail.mit.edu/im2recipe/pretrained/im2recipe_model.t7.gz).
+Our best model can be downloaded [here](http://data.csail.mit.edu/im2recipe/im2recipe_model.t7.gz).
 You can test it with:
 ```
 th main.lua -test 1 -loadsnap im2recipe_model.t7
