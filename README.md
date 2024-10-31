@@ -76,7 +76,7 @@ We use Python2.7 for data processing. Install dependencies with ```pip install -
 
 ## Recipe1M Dataset
 
-Our Recipe1M dataset is available for download [here](http://im2recipe.csail.mit.edu/dataset/download).
+In order to get access to the dataset, please fill the following form [here](https://forms.gle/EzYSu8j3D1LJzVbR8).
 
 ## Vision models
 
